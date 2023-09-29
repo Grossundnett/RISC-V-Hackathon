@@ -1,5 +1,4 @@
-#include <Servo.h>
-#include <SoftwareSerial.h>
+Working code for RISCDUINO:
 
 // Define pins
 #define trigPin 9
@@ -7,10 +6,15 @@
 const int motorPin = 8;  // Assuming this is the pin for the motor
 const int buttonPin = 2;
 
-// Create objects
-Servo myServo;
-Servo triggerServo;
-SoftwareSerial bluetoothSerial(2, 3); // RX, TX pins
+void servo_write(int pin, int deg) {
+  int time = 0;
+  pinMode(pin, OUTPUT);
+  time = map(deg, 0, 180, 544, 2200);
+  digitalWrite(pin, HIGH);
+  delayMicroseconds(time);
+  digitalWrite(pin, LOW);
+  delay(20);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -18,10 +22,6 @@ void setup() {
   pinMode(echoPin, INPUT);
   pinMode(motorPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
-
-  myServo.attach(8); // Attach the servo to pin 8
-  triggerServo.attach(9); 
-  bluetoothSerial.begin(9600); 
 }
 
 void loop() {
@@ -44,29 +44,9 @@ void loop() {
   delay(1000);
 
   // Rotate the servo
-  for(int angle = 0; angle <= 180; angle += 5) {
-    myServo.write(angle);
+  for (int angle = 0; angle <= 180; angle += 5) {
+    servo_write(8, angle); // Using the provided servo_write function
     delay(100);
-  }
-
-  // Bluetooth communication
-  if (bluetoothSerial.available()) {
-    char receivedChar = bluetoothSerial.read();
-    Serial.print("Received: ");
-    Serial.println(receivedChar);
-
-    if (receivedChar == 'A') {
-      digitalWrite(13, HIGH); 
-    } else if (receivedChar == 'B') {
-      digitalWrite(13, LOW);
-    }
-  }
-
-  if (Serial.available()) {
-    char sendChar = Serial.read();
-    Serial.print("Sending: ");
-    Serial.println(sendChar);
-    bluetoothSerial.write(sendChar); 
   }
 
   // Trigger mechanism
@@ -83,6 +63,7 @@ void pullTrigger() {
 }
 
 
+End of working code for RISCDUINO
 
 
 
@@ -94,7 +75,28 @@ void pullTrigger() {
 
 
 
-Copy of the same code,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Original raw code,
+  untinkered;
 
 
 // Code for ultrasonic sensor to detect target’s position
